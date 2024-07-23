@@ -1002,15 +1002,25 @@ fn render_immediate_viewport(
         }
     }
 
+    let screenshot_requested = std::mem::take(&mut viewport.screenshot_requested);
     let clipped_primitives = egui_ctx.tessellate(shapes, pixels_per_point);
-    painter.paint_and_update_textures(
+    let (_, screenshot) = painter.paint_and_update_textures(
         ids.this,
         pixels_per_point,
         [0.0, 0.0, 0.0, 0.0],
         &clipped_primitives,
         &textures_delta,
-        false,
+        screenshot_requested,
     );
+    if let Some(screenshot) = screenshot {
+        egui_winit
+            .egui_input_mut()
+            .events
+            .push(egui::Event::Screenshot {
+                viewport_id: viewport.ids.this,
+                image: screenshot.into(),
+            });
+    }
 
     egui_winit.handle_platform_output(window, platform_output);
 
