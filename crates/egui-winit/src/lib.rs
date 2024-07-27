@@ -1469,7 +1469,7 @@ fn process_viewport_command(
         }
         ViewportCommand::Screenshot => {
             *screenshot_requested = true;
-            println!(" screenshot request received {:?}", info.inner_rect);
+            // println!(" screenshot request received {:?}", info.inner_rect);
         }
     }
 }
