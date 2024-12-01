@@ -998,7 +998,12 @@ fn render_immediate_viewport(
         }
     }
 
-    let screenshot_requested = std::mem::take(&mut viewport.screenshot_requested);
+    // viewport.actions_requested
+    let screenshot_requested = viewport
+        .actions_requested
+        .take(&ActionRequested::Screenshot)
+        .is_some();
+    // let screenshot_requested = std::mem::take(&mut viewport.actions_requested);
     let clipped_primitives = egui_ctx.tessellate(shapes, pixels_per_point);
     let (_, screenshot) = painter.paint_and_update_textures(
         ids.this,
