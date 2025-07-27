@@ -965,6 +965,8 @@ fn render_immediate_viewport(
             .map(|(id, viewport)| (*id, viewport.info.clone()))
             .collect();
         input.time = Some(beginning.elapsed().as_secs_f64());
+        painter.handle_screenshots(&mut input.events);
+
         input
     };
 
