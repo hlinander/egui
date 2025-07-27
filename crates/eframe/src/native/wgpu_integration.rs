@@ -1011,6 +1011,15 @@ fn render_immediate_viewport(
             );
         }
     }
+    let mut screenshot_commands = vec![];
+    viewport.actions_requested.retain(|cmd| {
+        if let ActionRequested::Screenshot(info) = cmd {
+            screenshot_commands.push(info.clone());
+            false
+        } else {
+            true
+        }
+    });
 
     let clipped_primitives = egui_ctx.tessellate(shapes, pixels_per_point);
     painter.paint_and_update_textures(
@@ -1019,7 +1028,7 @@ fn render_immediate_viewport(
         [0.0, 0.0, 0.0, 0.0],
         &clipped_primitives,
         &textures_delta,
-        vec![],
+        screenshot_commands,
     );
 
     egui_winit.handle_platform_output(window, platform_output);
